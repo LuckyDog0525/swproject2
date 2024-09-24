@@ -1,0 +1,24 @@
+#define PIN_NUM 7
+
+int cnt = 0;
+
+void setup() {
+  pinMode(PIN_NUM, OUTPUT);
+  digitalWrite(PIN_NUM, 1);
+  delay(1000);
+}
+
+void loop() {
+  if (cnt < 10) {
+     if (!(cnt%2)) {
+      digitalWrite(PIN_NUM,0); 
+    } else {
+      digitalWrite(PIN_NUM,1);
+    }
+    delay(100);
+    cnt++; 
+  }
+  else {
+    digitalWrite(PIN_NUM,0);
+  }
+}
