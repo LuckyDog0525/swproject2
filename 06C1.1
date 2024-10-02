@@ -1,0 +1,38 @@
+int LED_PIN = 9;
+int period = 100;
+
+void set_duty(int duty) {
+  //duty 0 to 100(unit %)
+  int on = (period*duty)/100; //duty에 비례한 LED가 켜지는 시간을 계산
+  int off = period - on; // period 에서 켜져있는시간(on)을 빼면 꺼져있는 시간이 나옴
+  // 1000마이크로세컨드가 1미리세컨드임을 고려하여 계산한다
+  digitalWrite(LED_PIN,0);
+  delayMicroseconds(on);
+  //digitalWrite 이 0 이어야지 전위차가 발생하여 빛이 들어온다
+  digitalWrite(LED_PIN,1);
+  delayMicroseconds(off);
+  //반대로 digitalWrite 1이면 전위차가 발생하지 않아서 빛이 들어오지 않는다
+}
+void setup() {
+  // 9번핀이 사용될 것임을 선언해준다
+  pinMode(LED_PIN,OUTPUT);
+  Serial.begin(57600);
+}
+
+void loop() {
+  for(int duty = 0; duty <= 100; duty++) {
+    for(int x;x<50;x++) {//각 duty 에서 50번 반복하는것을 통해 밝기를 표현한다 duty별로 1회만 반복한다면 인간이 진동수에 맞게 빛을 인지하기 어렵기 때문이다
+    set_duty(duty);
+    }
+//    delay(5);
+    //5미리세컨드를 기다려야 0.5초가 경과했을때 최대밝기가 된다
+  }
+  for(int duty = 100; duty >= 0; duty--) {
+    for (int t=50; t>0; t--) {
+     set_duty(duty); 
+    }
+//    delay(5);
+    //같은 이유에서 5미리세컨드를 기다려야지 최종적으로 1초가 경과했을때 다시 꺼진다
+  }
+// 이와 같은 과정을 각각 period 가 1000us 와 10000us 일때 실행한다 
+}
