@@ -1,0 +1,74 @@
+int period;
+int duty;
+const int pinnum = 9;
+
+void setup() {
+    pinMode(pinnum, OUTPUT);
+}
+
+void loop() {
+    
+    set_period(10000); 
+    //주기가 10ms 인 경우
+    
+    for(int d = 0; d <= 100; d+=2) {
+        set_duty(d);
+    }
+    
+    for(int d = 100; d >= 0; d-=2) {
+        set_duty(d);
+    //0.5초에 걸쳐 밝기가 증가했다가 다시 0.5초에 걸쳐 밝기가 감소함
+    }
+    
+    
+    set_period(1000); 
+    //주기가 1ms인 경우
+    for(int d = 0; d <= 100; d++) {
+        set_duty(d);
+    }
+    
+    for(int d = 100; d >= 0; d--) {
+        set_duty(d);
+    }
+    
+
+    set_period(100); //주기가 0.1ms(100us)인 경우
+    
+    for(int d = 0; d <= 100; d++) {
+        set_duty(d);
+    }
+    
+    for(int d = 100; d >= 0; d--) {
+        set_duty(d);
+    }
+
+}
+
+// 주기 설정 함수(period = 입력값)
+void set_period(int p) {
+    period = p;
+}
+
+// 듀티 설정 함수
+void set_duty(int d) {
+    duty = d;
+        
+    int on = period / 100 * duty;
+    int off = period - on; 
+    /*전위차를 고려하면 low 일때가 on이고 high 일때가 off 다*/
+    
+    if(5000<period){                    // duty를 2씩 올리는 경우(10000us)
+        digitalWrite(pinnum, 0);
+        delayMicroseconds(on);
+        digitalWrite(pinnum, 1);
+        delayMicroseconds(off);
+    }
+    else{                               // duty를 1씩 올리는 경우
+        for(int i=0;i<5000/period;i++){
+        digitalWrite(pinnum, 0);
+        delayMicroseconds(on);
+        digitalWrite(pinnum, 1);
+        delayMicroseconds(off);
+        }
+    }
+}
