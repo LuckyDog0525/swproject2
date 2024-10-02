@@ -1,0 +1,35 @@
+int LED_PIN = 9;
+int period = 1000; 
+
+void set_duty(int duty) {
+  int on = (period * duty) / 100;  
+  int off = period - on;  
+  digitalWrite(LED_PIN, 0);
+  delayMicroseconds(on);     
+  digitalWrite(LED_PIN, 1);
+  delayMicroseconds(off);  
+}
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);  
+  Serial.begin(57600);    
+}
+
+void loop() {
+  
+  for (int duty = 0; duty <= 100; duty++) {
+    for (int x = 0; x < 50; x++) { 
+      set_duty(duty);
+    }
+    delay(1);
+  }
+
+
+  for (int duty = 100; duty >= 0; duty--) {
+    for (int x = 0; x < 50; x++) { 
+      set_duty(duty);
+    }
+    delay(1); 
+  }
+
+}
